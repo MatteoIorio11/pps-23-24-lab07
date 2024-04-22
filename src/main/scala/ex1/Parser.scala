@@ -1,5 +1,7 @@
 package ex1
 
+import ex1.Parsers.charParser
+
 /** Consider the Parser example shown in previous lesson. Analogously to NonEmpty, create a mixin NotTwoConsecutive,
   * which adds the idea that one cannot parse two consecutive elements which are equal. Use it (as a mixin) to build
   * class NotTwoConsecutiveParser, used in the testing code at the end. Note we also test that the two mixins can work
@@ -14,7 +16,7 @@ abstract class Parser[T]:
 
 object Parsers:
   extension (s: String)
-    def createParser(): Parser[Char] = 
+    def charParser(): Parser[Char] = 
       BasicParser(s.toSet)
 
 class BasicParser(chars: Set[Char]) extends Parser[Char]:
@@ -69,7 +71,7 @@ class NotTwoConsecutiveParser(chars: Set[Char]) extends BasicParser(chars) with 
   println("-----")
 
 
-  def sparser: Parser[Char] = ??? // "abc".charParser()
+  def sparser: Parser[Char] = "abc".charParser() // "abc".charParser()
   println(sparser.parseAll("aabc".toList)) // true
   println(sparser.parseAll("aabcdc".toList)) // false
   println(sparser.parseAll("".toList)) // true
