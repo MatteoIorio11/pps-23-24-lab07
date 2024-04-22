@@ -1,7 +1,10 @@
 package ex2
 
+import java.util.Random
+
 type Position = (Int, Int)
 type Percentage = Int
+type Probability = Int
 enum Direction:
   case North, East, South, West
   def turnRight: Direction = this match
@@ -56,6 +59,16 @@ class RobotWithBattery(robot: Robot, batteryUsage: Percentage) extends Robot:
   override def act(): Unit = battery match
       case percentage if checkBattery(percentage, battery) => {battery = battery - batteryUsage; robot.act()}
       case _ => println("The battery is empty, go charge it.")
+
+class RobotCanFail(robot: Robot, fail: Probability) extends Robot: 
+  require(fail >= 0 && fail <= 100)
+  export robot.{position, direction, turn}
+
+  override def act(): Unit = Random().nextInt(100) match
+    case prob if(prob > fail) => robot.act()
+    case _ => println("The robot can not perform the action, unlucky")
+  
+
 
 @main def testRobot: Unit =
   val robot = LoggingRobot(SimpleRobot((0, 0), Direction.North))
