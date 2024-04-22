@@ -1,6 +1,7 @@
 package ex2
 
 type Position = (Int, Int)
+type Percentage = Int
 enum Direction:
   case North, East, South, West
   def turnRight: Direction = this match
@@ -41,6 +42,8 @@ class LoggingRobot(val robot: Robot) extends Robot:
   override def act(): Unit =
     robot.act()
     println(robot.toString)
+
+class RobotWithBattery(robot: Robot, batteryUsage: Percentage)
 
 @main def testRobot: Unit =
   val robot = LoggingRobot(SimpleRobot((0, 0), Direction.North))
