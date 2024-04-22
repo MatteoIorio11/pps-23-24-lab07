@@ -28,6 +28,3 @@ class ParserTest extends org.scalatest.funsuite.AnyFunSuite:
         stringParser.parseAll("aabc".toList) should be (true)
         stringParser.parseAll("aabcdc".toList) should be (false)
         stringParser.parseAll(("".toList)) should be (true)
-
-
-
