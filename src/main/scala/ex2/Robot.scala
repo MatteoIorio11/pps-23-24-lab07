@@ -43,7 +43,19 @@ class LoggingRobot(val robot: Robot) extends Robot:
     robot.act()
     println(robot.toString)
 
-class RobotWithBattery(robot: Robot, batteryUsage: Percentage)
+class RobotWithBattery(robot: Robot, batteryUsage: Percentage) extends Robot:
+  require(batteryUsage > 0 && batteryUsage <= 100)
+  private var battery: Percentage = 100
+  private val checkBattery: (Percentage, Percentage) => Boolean =
+     ((percentage, currBatter) => percentage > 0 &&
+        percentage <= 100 &&
+        currBatter - batteryUsage >= 0)
+
+  export robot.{position, direction, turn}
+     
+  override def act(): Unit = battery match
+      case percentage if checkBattery(percentage, battery) => {battery = battery - batteryUsage; robot.act()}
+      case _ => println("The battery is empty, go charge it.")
 
 @main def testRobot: Unit =
   val robot = LoggingRobot(SimpleRobot((0, 0), Direction.North))
