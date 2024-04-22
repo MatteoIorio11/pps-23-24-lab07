@@ -4,7 +4,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class RobotSpec extends AnyFlatSpec with Matchers:
-  "A SimpleRobot" should "turn correctly" in {
+  "A SimpleRobot" should "turn correctly" in:
     val robot = new SimpleRobot((0, 0), Direction.North)
     
     robot.turn(Direction.East)
@@ -18,9 +18,8 @@ class RobotSpec extends AnyFlatSpec with Matchers:
     
     robot.turn(Direction.North)
     robot.direction should be (Direction.North)
-  }
   
-  it should "act correctly" in {
+  it should "act correctly" in:
     val robot = new SimpleRobot((0, 0), Direction.North)
     
     robot.act()
@@ -37,4 +36,3 @@ class RobotSpec extends AnyFlatSpec with Matchers:
     robot.turn(Direction.West)
     robot.act()
     robot.position should be ((0, 0))
-  }
