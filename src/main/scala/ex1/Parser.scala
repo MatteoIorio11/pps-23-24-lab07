@@ -6,13 +6,17 @@ package ex1
   * together!!
   */
 
+
 abstract class Parser[T]:
   def parse(t: T): Boolean // is the token accepted?
   def end: Boolean // is it ok to end here
   def parseAll(seq: Seq[T]): Boolean = (seq forall parse) & end // note &, not &&
 
 object Parsers:
-  val todo = ??? // put the extensions here..
+  extension (s: String)
+    def createParser(): Parser[Char] = 
+      BasicParser(s.toSet)
+
 class BasicParser(chars: Set[Char]) extends Parser[Char]:
   override def parse(t: Char): Boolean = chars.contains(t)
   override def end: Boolean = true
@@ -27,10 +31,17 @@ trait NonEmpty[T] extends Parser[T]:
 class NonEmptyParser(chars: Set[Char]) extends BasicParser(chars) with NonEmpty[Char]
 
 trait NotTwoConsecutive[T] extends Parser[T]:
-  val todo = ???
+  private var lastChar = null
+  abstract override def parse(t: T): Boolean = lastChar match
+    case null => {lastChar = t; super.parse(t)}
+    case el if super.parse(t) && !t.equals(el) => {lastChar = t; super.parse(t)}
+    case el => false
+
+  abstract override def end = super.end
+  
 // ???
 
-class NotTwoConsecutiveParser(chars: Set[Char]) extends BasicParser(chars) // with ????
+class NotTwoConsecutiveParser(chars: Set[Char]) extends BasicParser(chars) with NonEmpty[Char]
 
 @main def checkParsers(): Unit =
   def parser = new BasicParser(Set('a', 'b', 'c'))
