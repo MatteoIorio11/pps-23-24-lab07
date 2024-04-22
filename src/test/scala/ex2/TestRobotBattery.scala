@@ -20,4 +20,4 @@ class TestRobot extends org.scalatest.funsuite.AnyFunSuite:
         robot.act()
         robot.position should be ((0,2))
         robot.act()
-        robot position should not be ((0,3))
+        robot.position should be ((0,2))
