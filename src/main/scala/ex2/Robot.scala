@@ -5,6 +5,7 @@ import java.util.Random
 type Position = (Int, Int)
 type Percentage = Int
 type Probability = Int
+type Repetition = Int
 enum Direction:
   case North, East, South, West
   def turnRight: Direction = this match
@@ -46,7 +47,7 @@ class LoggingRobot(val robot: Robot) extends Robot:
     robot.act()
     println(robot.toString)
 
-class RobotWithBattery(robot: Robot, batteryUsage: Percentage) extends Robot:
+class RobotWithBattery(robot: Robot, private val batteryUsage: Percentage) extends Robot:
   require(batteryUsage > 0 && batteryUsage <= 100)
   private var battery: Percentage = 100
   private val checkBattery: (Percentage, Percentage) => Boolean =
@@ -60,7 +61,7 @@ class RobotWithBattery(robot: Robot, batteryUsage: Percentage) extends Robot:
       case percentage if checkBattery(percentage, battery) => {battery = battery - batteryUsage; robot.act()}
       case _ => println("The battery is empty, go charge it.")
 
-class RobotCanFail(robot: Robot, fail: Probability) extends Robot: 
+class RobotCanFail(robot: Robot, private val fail: Probability) extends Robot: 
   require(fail >= 0 && fail <= 100)
   export robot.{position, direction, turn}
 
@@ -68,7 +69,10 @@ class RobotCanFail(robot: Robot, fail: Probability) extends Robot:
     case prob if(prob > fail) => robot.act()
     case _ => println("The robot can not perform the action, unlucky")
   
-
+class RobotRepeat(robot: Robot, private val times: Repetition) extends Robot:
+  require(times >= 0)
+  export robot.{position, direction, turn}
+  override def act(): Unit = (1 to times).foreach(_ => robot.act())
 
 @main def testRobot: Unit =
   val robot = LoggingRobot(SimpleRobot((0, 0), Direction.North))
