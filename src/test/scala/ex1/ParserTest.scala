@@ -2,11 +2,13 @@ package ex1
 
 import org.scalatest.matchers.should.Matchers.*
 import ex1.Parsers.charParser
+import ex1.Parsers.*
 
 class ParserTest extends org.scalatest.funsuite.AnyFunSuite:
     def basicParser = new BasicParser(Set('a', 'b', 'c'))
     def notEmptyParser = new NonEmptyParser(Set('0', '1'))
     def notTwoParser = new NotTwoConsecutiveParser(Set('X', 'Y', 'Z'))
+    def shortenParser = new ShortenThenParser(Set('X', 'Y', 'Z'), 2)
     def stringParser = "abc".charParser()
 
     test ("Test Basic Parser operations"):
@@ -28,3 +30,7 @@ class ParserTest extends org.scalatest.funsuite.AnyFunSuite:
         stringParser.parseAll("aabc".toList) should be (true)
         stringParser.parseAll("aabcdc".toList) should be (false)
         stringParser.parseAll(("".toList)) should be (true)
+
+    test("Test Shorten Then Parser"):
+        shortenParser.parseAll("XY".toList) should be (true)
+        shortenParser.parseAll("XYZ".toList) should be (false)
