@@ -27,7 +27,8 @@ object ConnectThree extends App:
 
   import Player.*
 
-  def find(board: Board, x: Int, y: Int): Option[Player] = ???
+  def find(board: Board, x: Int, y: Int): Option[Player] = 
+    board.find(disk => disk.x == x && disk.y == y).map(disk => disk.player).orElse(None)
 
   def firstAvailableRow(board: Board, x: Int): Option[Int] = ???
 
@@ -46,6 +47,9 @@ object ConnectThree extends App:
         print(" ")
         if board == game.head then println()
 
+@main def main(): Unit = 
+  import ex4.ConnectThree.* 
+  import ex4.ConnectThree.Player.*
   // Exercise 1: implement find such that..
   println("EX 1: ")
   println(find(List(Disk(0, 0, X)), 0, 0)) // Some(X)
