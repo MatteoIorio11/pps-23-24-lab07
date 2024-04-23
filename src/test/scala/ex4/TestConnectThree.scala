@@ -18,3 +18,6 @@ class TestConnectThree extends org.scalatest.funsuite.AnyFunSuite:
         game.firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X), Disk(0, 3, X)), 0) should be (None)
         game.firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X), Disk(0, 3, X)), 1) should be (Some(0))
 
+    test("Test Place Any Disk"):
+        game.placeAnyDisk(List(), X).toSet should be (Set(List(Disk(0,0, X)), List(Disk(1,0, X)), List(Disk(2, 0, X)), List(Disk(3, 0, X))))
+        game.placeAnyDisk(List(Disk(0, 0, O)), X).toSet should be (Set(List(Disk(0, 0, O), Disk(0, 1, X)), List(Disk(0, 0, O), Disk(1, 0, X)), List(Disk(0, 0, O), Disk(2, 0, X)), List(Disk(0, 0, O), Disk(3, 0, X))) )
