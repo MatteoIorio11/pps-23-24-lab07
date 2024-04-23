@@ -39,7 +39,20 @@ trait NotTwoConsecutive[T] extends Parser[T]:
     case Some(el) if !t.equals(el) => {lastChar = Option(t); super.parse(t)}
     case Some(el) => false
     case _ => {lastChar = Option(t); super.parse(t)}
-  abstract override def end: Boolean = super.end 
+  abstract override def end: Boolean = super.end
+
+trait ShortenThen[T] extends Parser[T]:
+  private var current = 0
+  def n: Int
+  abstract override def parse(t: T): Boolean = current match
+    case x if x < n => {current = current + 1; super.parse(t)}
+    case _ => false
+
+  abstract override def end: Boolean = (n >= current) && super.end
+  
+
+
+class ShortenThenParser(chars: Set[Char], override val n: Int) extends BasicParser(chars = chars) with NonEmpty[Char] with ShortenThen[Char]
 
 
 class NotTwoConsecutiveParser(chars: Set[Char]) extends BasicParser(chars) with NonEmpty[Char] with NotTwoConsecutive[Char]
