@@ -1,6 +1,8 @@
 package ex4
 
 import java.util.OptionalInt
+import javax.swing.text.Position
+import scala.compiletime.ops.double
 
 // Optional!
 object ConnectThree extends App:
@@ -32,12 +34,24 @@ object ConnectThree extends App:
 
   def firstAvailableRow(board: Board, x: Int): Option[Int] = board.filter(disk => disk.x == x) match
     case Nil => Some(0)
-    case _ => board
+    case list => list
       .sortBy(disk => disk.y)
       .lastOption.map(disk => disk.y + 1).filter(y => y <= 3).orElse(None)
       
 
-  def placeAnyDisk(board: Board, player: Player): Seq[Board] = ???
+  def placeAnyDisk(board: Board, player: Player): Seq[Board] = 
+    // (0,3) -> (0,2) -> (0, 1) -> (0,0)
+    var sequence: Seq[Board] = LazyList()
+    sequence = 
+      for
+        x <- 0 to 3
+        row = firstAvailableRow(board, x)
+        if row.isDefined
+        pos = Disk(x, row.get, player)
+      yield
+        board :+ (pos)
+    sequence
+
 
   def computeAnyGame(player: Player, moves: Int): LazyList[Game] = ???
 
@@ -70,6 +84,7 @@ object ConnectThree extends App:
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X), Disk(0, 3, X)), 0)) // None
   // Exercise 2: implement placeAnyDisk such that..
   printBoards(placeAnyDisk(List(), X))
+  println((placeAnyDisk(List(), X)))
   // .... .... .... ....
   // .... .... .... ....
   // .... .... .... ....
