@@ -53,7 +53,20 @@ object ConnectThree extends App:
     sequence
 
 
-  def computeAnyGame(player: Player, moves: Int): LazyList[Game] = ???
+  def computeAnyGame(player: Player, moves: Int): LazyList[Game] = 
+    val board: Seq[Disk] = List()
+    var game: LazyList[Game] = LazyList()
+    val boards = placeAnyDisk(board, player)
+    var currPlayer = player
+    for i <- 0 until moves do
+      for b <- boards do 
+        currPlayer match
+          case X => 
+            game = game.appended(placeAnyDisk(b, Player.O))
+          case O => 
+            game = game.appended(placeAnyDisk(b, Player.X))  
+    game
+
 
   def printBoards(game: Seq[Board]): Unit =
     for
@@ -84,7 +97,6 @@ object ConnectThree extends App:
   println(firstAvailableRow(List(Disk(0, 0, X), Disk(0, 1, X), Disk(0, 2, X), Disk(0, 3, X)), 0)) // None
   // Exercise 2: implement placeAnyDisk such that..
   printBoards(placeAnyDisk(List(), X))
-  println((placeAnyDisk(List(), X)))
   // .... .... .... ....
   // .... .... .... ....
   // .... .... .... ....
