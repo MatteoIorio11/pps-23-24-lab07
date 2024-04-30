@@ -2,6 +2,7 @@ package ex3
 
 import scala.collection.immutable.SortedSet
 import scala.collection.immutable.Queue
+import scala.compiletime.ops.double
 type Board = (Int, Int)
 type BoardPosition = (Int, Int)
 type Solution = Queue[BoardPosition]
@@ -24,15 +25,17 @@ object Solitaire extends App:
         possibleX <- 0 until board._1
         possibleY <- 0 until board._2
         possiblePosition = (possibleX, possibleY)
-        if positions.forall(pos => !pos.eq(possiblePosition)) && isPlaceable(possiblePosition = possiblePosition, positions = positions)
+        if positions.forall(pos => pos._1 != possiblePosition._1 && pos._2 != possiblePosition._2) &&
+          isPlaceable(possiblePosition = possiblePosition, positions = positions)
       yield
         positions.enqueue(possiblePosition)
   
 
   private def isPlaceable(possiblePosition: BoardPosition, positions: Solution): Boolean = 
     val lastPosition = positions.last
-    ((lastPosition._1 - possiblePosition._1).abs == 2 && (lastPosition._2 - possiblePosition._2).abs == 0 ||
-    (lastPosition._1 - possiblePosition._1).abs == 1 && (lastPosition._2 - possiblePosition._2).abs == 1)
+    (((lastPosition._1 - possiblePosition._1).abs == 2 && (lastPosition._2 - possiblePosition._2).abs == 0) ||
+    ((lastPosition._1 - possiblePosition._1).abs == 0 && (lastPosition._2 - possiblePosition._2).abs == 2) ||
+    ((lastPosition._1 - possiblePosition._1).abs == 1 && (lastPosition._2 - possiblePosition._2).abs == 1))
  
 
   def render(solution: Seq[BoardPosition], width: Int, height: Int): String =
@@ -44,5 +47,6 @@ object Solitaire extends App:
           yield if number > 0 then "%-2d ".format(number) else "X  "
       yield row.mkString
     rows.mkString("\n")
-  placeMarks((3, 3)).foreach(p => println(p))
+
   //println(render(solution = Seq((0, 0), (2, 1)), width = 3, height = 3))
+  placeMarks((3,3)).foreach(p=> println(p))
